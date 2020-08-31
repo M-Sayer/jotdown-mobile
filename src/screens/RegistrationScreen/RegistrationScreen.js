@@ -36,7 +36,7 @@ export default function RegistrationScreen({navigation}) {
           .doc(uid)
           .set(data)
           .then(() => {
-            userContext.setUser({user: data});
+            userContext.setUid(uid);
             navigation.navigate('Home');
           })
           .catch(error => alert(error));

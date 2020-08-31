@@ -1,7 +1,7 @@
-import React, { useEffect, useState, useContext } from 'react';
+import React, { useEffect, useState, useContext, useLayoutEffect } from 'react';
 import { Text, View, FlatList, Keyboard, TextInput, TouchableOpacity, Animated } from 'react-native';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
-import Swipeable from 'react-native-gesture-handler/Swipeable'
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import Swipeable from 'react-native-gesture-handler/Swipeable';
 
 import styles from './styles';
 import { firebase } from '../../firebase/config';
@@ -9,13 +9,13 @@ import UserContext from '../../Contexts/UserContext';
 
 export default function HomeScreen({navigation}) {
 
-  const userContext = useContext(UserContext)
+  const userContext = useContext(UserContext);
 
   const [noteTitle, setNoteTitle] = useState('');
   const [notes, setNotes] = useState([]);
 
   const noteRef = firebase.firestore().collection('notes');
-  const userId = userContext.user.uid;
+  const userId = userContext.uid;
   
   const fetchNotes = () => {
     noteRef
@@ -26,10 +26,26 @@ export default function HomeScreen({navigation}) {
         querySnapshot.forEach(doc => newNotes.push({...doc.data(), id: doc.id}));
         setNotes(newNotes);
       }, error => console.log(error)
-      )
-  }
+      );
+  };
   
   useEffect(() => fetchNotes(), [])
+
+  const onLogoutPress = () => 
+    firebase
+      .auth()
+      .signOut()
+      .then(() => userContext.setLoggedIn(false))
+
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      headerRight: () => (
+        <TouchableOpacity onPress={onLogoutPress}>
+          <Text style={{ marginRight: 10, }}>Logout</Text>
+        </TouchableOpacity>
+      ),
+    });
+  }, [navigation])
 
   const onAddButtonPress = () => {
     if (noteTitle && noteTitle.length > 0) {
@@ -40,40 +56,40 @@ export default function HomeScreen({navigation}) {
         timestamp: timestamp,
         content: '',
       };
-      
+      console.log(data)
       noteRef
         .add(data)
         .then(() => {
           setNoteTitle('')
           Keyboard.dismiss()
         })
-        .catch(error => alert(error))
-    }
-  }
+        .catch(error => alert(error));
+    };
+  };
 
   const onNotePress = (note) => {
-    return navigation.navigate('Note', { note })
-  }
+    return navigation.navigate('Note', { note });
+  };
 
   const renderAddButton = () => {
     return (
       <TouchableOpacity style={styles.button} onPress={onAddButtonPress}>
         <Text style={styles.buttonText}>Add</Text>
       </TouchableOpacity>
-    )
-  }
+    );
+  };
 
   const onDeleteButtonPress = (noteId) => {
     
-    const newNotes = notes.filter(note => note.id !== noteId)
+    const newNotes = notes.filter(note => note.id !== noteId);
     
     noteRef
       .doc(noteId)
       .delete()
       .then(() => setNotes(newNotes))
-      .catch(error => console.log(error))
+      .catch(error => console.log(error));
     
-  }
+  };
 
   const renderDeleteButton = (progress, dragX, noteId) => {
     const scale = dragX.interpolate({
@@ -101,14 +117,13 @@ export default function HomeScreen({navigation}) {
           </Animated.Text>
         </Animated.View>
      </TouchableOpacity>
-    )
-  }
+    );
+  };
 
   const renderNote = ({ item }) => {
     return (
       <Swipeable
-        renderRightActions={(progress, dragX) => renderDeleteButton(progress, dragX, item.id)}
-      >
+        renderRightActions={(progress, dragX) => renderDeleteButton(progress, dragX, item.id)}>
         <View style={styles.noteContainer}>
           <TouchableOpacity onPress={() => onNotePress(item)}>
             <Text style={styles.noteTitle}>
@@ -117,9 +132,8 @@ export default function HomeScreen({navigation}) {
           </TouchableOpacity>
         </View>
       </Swipeable>
-    
-    )
-  }
+    );
+  };
 
   const renderNotes = () => {
     return (
@@ -131,8 +145,8 @@ export default function HomeScreen({navigation}) {
           removeClippedSubviews={true}
         />
       </View>
-    )
-  }
+    );
+  };
 
   return (
     <KeyboardAwareScrollView 
@@ -151,5 +165,5 @@ export default function HomeScreen({navigation}) {
       </View>
       { notes && renderNotes() }
     </KeyboardAwareScrollView>
-  )
-}
+  );
+};

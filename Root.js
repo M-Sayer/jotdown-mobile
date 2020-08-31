@@ -23,14 +23,17 @@ export default function Root() {
 
   useEffect(() => {
     firebase.auth().onAuthStateChanged(user => {
-      if (user) { userContext.setUser(user) }
+      if (user) { 
+        userContext.setUid(user.uid)
+        userContext.setLoggedIn(true)
+      }
     })
   }, []);
   
   return (
     <NavigationContainer>
         <Stack.Navigator>
-          { userContext.user
+          { userContext.loggedIn
               ? (
                 <>
                   <Stack.Screen name='Home' component={HomeScreen} />

@@ -29,8 +29,7 @@ export default function LoginScreen({navigation}) {
           .get()
           .then(doc => {
             if (!doc.exists) return alert('User does not exist.');
-
-            userContext.setUser({user: doc.data()});
+            userContext.setUid(uid);
             navigation.navigate('Home');
           })
           .catch(error => alert(error));
