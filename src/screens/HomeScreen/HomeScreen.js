@@ -9,7 +9,7 @@ export default function HomeScreen({navigation}) {
 
   const userContext = useContext(UserContext)
 
-  const [noteText, setNoteText] = useState('');
+  const [noteTitle, setNoteTitle] = useState('');
   const [notes, setNotes] = useState([]);
 
   const noteRef = firebase.firestore().collection('notes');
@@ -28,28 +28,28 @@ export default function HomeScreen({navigation}) {
   }, [])
 
   const onAddButtonPress = () => {
-    if (noteText && noteText.length > 0) {
+    if (noteTitle && noteTitle.length > 0) {
       const timestamp = firebase.firestore.FieldValue.serverTimestamp();
       const data = {
-        text: noteText,
+        title: noteTitle,
         authorID: userId,
         timestamp: timestamp,
+        content: '',
       };
       
       noteRef
         .add(data)
         .then(() => {
-          setNoteText('')
+          setNoteTitle('')
           Keyboard.dismiss()
-          console.log(noteText)
+          console.log(noteTitle)
         })
         .catch(error => alert(error))
     }
   }
 
-  const onNotePress = (item) => {
-    console.log(item.id)
-    return navigation.navigate('Note')
+  const onNotePress = (note) => {
+    return navigation.navigate('Note', { note })
   }
 
   const renderNote = ({ item }) => {
@@ -57,8 +57,8 @@ export default function HomeScreen({navigation}) {
       
         <View style={styles.noteContainer}>
           <TouchableOpacity onPress={() => onNotePress(item)}>
-            <Text style={styles.noteText}>
-              {item.text}
+            <Text style={styles.noteTitle}>
+              {item.title}
             </Text>
           </TouchableOpacity>
         </View>
@@ -75,8 +75,8 @@ export default function HomeScreen({navigation}) {
           style={styles.input}
           placeholder='Add new note'
           placeholderTextColor='#aaaaaa'
-          onChangeText={text => setNoteText(text)}
-          value={noteText}
+          onChangeText={text => setNoteTitle(text)}
+          value={noteTitle}
           autoCapitalize='none'
         />
         <TouchableOpacity style={styles.button} onPress={onAddButtonPress}>
@@ -88,7 +88,7 @@ export default function HomeScreen({navigation}) {
             <FlatList
               data={notes}
               renderItem={renderNote}
-              keyExtractor={item => item.id}
+              keyExtractor={note => note.id}
               removeClippedSubviews={true}
             />
           </View>
