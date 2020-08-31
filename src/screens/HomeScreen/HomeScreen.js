@@ -42,7 +42,6 @@ export default function HomeScreen({navigation}) {
         .then(() => {
           setNoteTitle('')
           Keyboard.dismiss()
-          console.log(noteTitle)
         })
         .catch(error => alert(error))
     }
