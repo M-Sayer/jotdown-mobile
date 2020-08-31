@@ -53,5 +53,14 @@ export default StyleSheet.create({
     fontSize: 20,
     color: '#333333',
     flex: 1,
-  }
+  },
+  rightAction: {
+    backgroundColor: '#dd2c00',
+    justifyContent: 'center',
+    alignItems: 'flex-end',
+  },
+  actionText: {
+    color: '#fff',
+    padding: 20,
+  },
 })
