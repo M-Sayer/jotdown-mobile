@@ -1,5 +1,5 @@
 import React, { useState, useLayoutEffect, useEffect } from 'react';
-import { Button, Text, TextInput, View, TouchableOpacity } from 'react-native';
+import { Text, TextInput, View, TouchableOpacity } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import styles from './styles';
 
@@ -48,27 +48,15 @@ export default function NoteScreen({route, navigation}) {
       </Text>
       <TouchableOpacity onPress={() => setEdit(true)}>
       <View style={styles.noteContainer}>
-          {/* {(!note.content || edit) 
-            ? <TextInput
-                style={styles.input}
-                multiline={true}
-                placeholder='Enter text...'
-                palceholderTextColor='#aaaaaa'
-                onChangeText={text => setContent(text)}
-                onTextInput={() => setEdit(true)}
-                value={content}
-              />
-            : !edit && <Text>{content}</Text>
-          } */}
-          <TextInput
-                style={styles.input}
-                multiline={true}
-                placeholder='Enter text...'
-                palceholderTextColor='#aaaaaa'
-                onChangeText={text => setContent(text)}
-                onTextInput={() => setEdit(true)}
-                value={content}
-              />
+        <TextInput
+              style={styles.input}
+              multiline={true}
+              placeholder='Enter text...'
+              palceholderTextColor='#aaaaaa'
+              onChangeText={text => setContent(text)}
+              onTextInput={() => setEdit(true)}
+              value={content}
+            />
       </View>
       </TouchableOpacity>
       <View style={styles.buttonContainer}>
@@ -85,12 +73,6 @@ export default function NoteScreen({route, navigation}) {
                 <Text style={styles.buttonText}>Save</Text>
               </TouchableOpacity>
             </View>
-  
-          // : <TouchableOpacity 
-          //     style={styles.button} 
-          //     onPress={onDeleteButtonPress}>
-          //     <Text style={styles.buttonText}>Delete</Text>
-          //   </TouchableOpacity>
         }
       </View>
     </KeyboardAwareScrollView>
