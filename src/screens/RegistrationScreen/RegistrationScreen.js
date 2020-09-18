@@ -1,5 +1,5 @@
 import React, { useState, useContext } from 'react';
-import { Image, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 import styles from './styles';
@@ -71,6 +71,7 @@ export default function RegistrationScreen({navigation}) {
         />
         <TextInput 
           style={styles.input}
+          secureTextEntry={true}
           placeholder='Password'
           placeholderTextColor='#aaaaaa'
           onChangeText={(text) => setPassword(text)}
@@ -79,6 +80,7 @@ export default function RegistrationScreen({navigation}) {
         />
         <TextInput 
           style={styles.input}
+          secureTextEntry={true}
           placeholder='Confirm Password'
           placeholderTextColor='#aaaaaa'
           onChangeText={(text) => setConfirmPassword(text)}

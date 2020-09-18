@@ -5,6 +5,7 @@ export default StyleSheet.create({
     flex: 1,
   },
   title: {
+    marginLeft: 20,
     fontSize: 40,
     color: '#212121',
   },
